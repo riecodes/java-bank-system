@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BankSystem" default="run" basedir=".">
+    <description>Builds, tests, and runs the project BankSystem.</description>
+
+    <import file="nbproject/build-impl.xml"/>
+    
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="lib.dir" value="lib"/> <!-- Ensure this points to where the JAR is -->
+    <property name="dist.dir" value="dist"/>
+    <property name="dist.jar" value="${dist.dir}/BankSystem.jar"/>
+
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}">
+            <classpath>
+                <!-- Add Apache Commons CSV JAR to classpath -->
+                <pathelement location="${lib.dir}/commons-csv-1.11.0.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile">
+        <jar destfile="${dist.jar}" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="banksystem.Register"/>
+                <attribute name="Class-Path" value="lib/commons-csv-1.11.0.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="dist">
+        <java jar="${dist.jar}" fork="true">
+            <classpath>
+                <pathelement location="${lib.dir}/commons-csv-1.11.0.jar"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+</project>
